@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /inventory_system/auth/login.php');
+    header('Location: /inventory_system/index.php');
     exit();
 }
 ?>
@@ -40,16 +40,16 @@ body { background:#EEEEEE; color:#EEEEEE; }
 </head>
 <body>
 
-<div class="sidebar">
-  <h4>Shoe Inventory</h4>
-  <small class="text-white d-block mb-3">Hello, <?= htmlspecialchars($_SESSION['username']) ?></small>
+  <div class="sidebar">
+    <h4>Shoe Inventory</h4>
+    <small class="text-white d-block mb-3">Hello, <?= htmlspecialchars($_SESSION['username']) ?></small>
 
-  <a href="/inventory_system/dashboard.php">Dashboard</a>
-  <a href="/inventory_system/products/list_products.php">Products</a>
-  <a href="/inventory_system/sales/list_sales.php">Sales</a>
-  <a href="/inventory_system/purchases/list_purchases.php">Purchases</a>
+    <a href="/inventory_system/dashboard.php">Dashboard</a>
+    <a href="/inventory_system/products/list_products.php">Products</a>
+    <a href="/inventory_system/sales/list_sales.php">Sales</a>
+    <a href="/inventory_system/purchases/list_purchases.php">Purchases</a>
     <a href="/inventory_system/reports/reports.php">Reports</a>
-  <a href="/inventory_system/auth/logout.php" class="text-danger">Logout</a>
-</div>
+    <a href="/inventory_system/auth/logout.php" class="text-danger">Logout</a>
+  </div>
 
 <div class="content">

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $target = $uploadDir . '/' . time() . '_' . basename($_FILES['image']['name']);
         if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-            $imagePath = 'uploads/' . basename($target);
+            $imagePath = '/inventory_system/uploads/' . basename($target);
         }
     }
 
