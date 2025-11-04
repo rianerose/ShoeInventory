@@ -2,6 +2,21 @@
 include '../layout.php';
 require '../config/db.php';
 
+if (!function_exists('resolve_image_src')) {
+    function resolve_image_src(?string $path): string {
+        if (!$path) {
+            return '';
+        }
+        if (preg_match('#^(https?:)?//#', $path)) {
+            return $path;
+        }
+        if ($path[0] === '/') {
+            return $path;
+        }
+        return '/inventory_system/' . ltrim($path, '/');
+    }
+}
+
 // Pagination
 $limit = 8;
 $page = isset($_GET['page']) ? max(1,intval($_GET['page'])) : 1;
@@ -74,7 +89,8 @@ $products = $stmt->fetchAll();
   <td><?= htmlspecialchars($p['category']) ?></td>
   <td><?= $p['quantity'] ?></td>
   <td>₱<?= number_format($p['price'],2) ?></td>
-  <td><?php if($p['image_url']): ?><img src="<?= htmlspecialchars($p['image_url']) ?>" class="table-img"><?php endif; ?></td>
+  <?php $imageSrc = resolve_image_src($p['image_url']); ?>
+  <td><?php if($imageSrc): ?><img src="<?= htmlspecialchars($imageSrc) ?>" class="table-img"><?php endif; ?></td>
   <td>
     <a class="btn btn-sm btn-warning" href="edit_product.php?id=<?= $p['id'] ?>">Edit</a>
     <?php if($_SESSION['role']==='admin'): ?>

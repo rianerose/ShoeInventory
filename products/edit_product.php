@@ -1,6 +1,21 @@
 <?php
 include '../layout.php';
 require '../config/db.php';
+
+if (!function_exists('resolve_image_src')) {
+    function resolve_image_src(?string $path): string {
+        if (!$path) {
+            return '';
+        }
+        if (preg_match('#^(https?:)?//#', $path)) {
+            return $path;
+        }
+        if ($path[0] === '/') {
+            return $path;
+        }
+        return '/inventory_system/' . ltrim($path, '/');
+    }
+}
 $id = $_GET['id'] ?? null;
 if (!$id) { header('Location: list_products.php'); exit(); }
 $stmt = $conn->prepare('SELECT * FROM products WHERE id = ?');
@@ -19,16 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cost = $_POST['cost'];
     $quantity = $_POST['quantity'];
     $min_stock_level = $_POST['min_stock_level'];
-    $imagePath = $product['image_url'];
+$imagePath = $product['image_url'];
 
     if (!empty($_FILES['image']['name'])) {
         $uploadDir = __DIR__ . '/../uploads';
         if (!is_dir($uploadDir)) mkdir($uploadDir,0755,true);
         $target = $uploadDir . '/' . time() . '_' . basename($_FILES['image']['name']);
         if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-            $imagePath = 'uploads/' . basename($target);
+            $imagePath = '/inventory_system/uploads/' . basename($target);
         }
     }
+
+    $imagePath = resolve_image_src($imagePath);
 
     $sql = 'UPDATE products SET sku=?, brand=?, model=?, category=?, size=?, color=?, price=?, cost=?, quantity=?, min_stock_level=?, image_url=? WHERE id=?';
     $conn->prepare($sql)->execute([$sku,$brand,$model,$category,$size,$color,$price,$cost,$quantity,$min_stock_level,$imagePath,$id]);
@@ -58,7 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="col-md-3 mb-2"><input class="form-control" style="margin-bottom:10px;"  name="min_stock_level" type="number" class="form-control" value="<?= $product['min_stock_level'] ?>"></div>
     <div class="col-md-6 mb-2">
       <input class="form-control" style="margin-bottom:10px;"  name="image" type="file" class="form-control">
-      <?php if($product['image_url']): ?><img src="<?= htmlspecialchars($product['image_url']) ?>" class="table-img mt-2"><?php endif; ?>
+        <?php $resolvedImage = resolve_image_src($product['image_url']); ?>
+        <?php if($resolvedImage): ?><img src="<?= htmlspecialchars($resolvedImage) ?>" class="table-img mt-2"><?php endif; ?>
     </div>
   </div>
   <button style="background:#00ADB5; border:none; padding:10px 20px; color:#222831; font-weight:bold;"  class="btn btn-primary mt-2">Save</button>
