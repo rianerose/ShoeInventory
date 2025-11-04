@@ -1,0 +1,17 @@
+
+:root{
+  --bg:#222831;
+  --card:#393E46;
+  --accent:#00ADB5;
+  --text:#EEEEEE;
+}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);margin:0;padding:20px;}
+.container{max-width:1100px;margin:0 auto;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.card{background:linear-gradient(180deg, rgba(57,62,70,0.9), rgba(34,40,49,0.9));padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.5);margin-bottom:16px;}
+.kpis{display:flex;gap:12px;flex-wrap:wrap;}
+.kpi{flex:1;padding:12px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;gap:12px;}
+.kpi .icon{font-size:28px;padding:12px;border-radius:8px;background:rgba(0,0,0,0.15);color:var(--accent);}
+.btn{display:inline-block;padding:8px 12px;border-radius:6px;background:var(--accent);color:#000;text-decoration:none;font-weight:600;border:none;cursor:pointer;}
+.controls{display:flex;gap:8px;align-items:center;}
+.small{font-size:13px;color:#cfcfcf;}
